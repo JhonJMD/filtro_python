@@ -1,0 +1,87 @@
+import screen as sc
+import corefile as file
+import menu as m
+
+def validacionInt(message : str):
+    while True:
+        try:
+            val = int(input(message))
+        except ValueError:
+            print('Dato invalido....')
+            sc.pauseScreen()
+        else:
+            return val
+
+def validacionFloat(message : str):
+    while True:
+        try:
+            val = float(input(message))
+        except ValueError:
+            print('Dato invalido....')
+            sc.pauseScreen()
+        else:
+            return val 
+
+def otherEmpleado(isaddempleado : bool, empleados : dict):
+    while True:
+        isaddempleado = input('Desea registrar otro empleado: s(si) ---- Enter(no): ').upper()
+        if isaddempleado == '':
+            isaddempleado = False
+            m.menuMain(empleados)
+            break 
+        elif isaddempleado == 'S':
+            isaddempleado = True
+            break
+    return isaddempleado
+
+def addEmpleado(empleados : dict):
+    isaddempleado = True
+    while isaddempleado:
+        empleado = {
+            'id' : 0,
+            'nombre' : '',
+            'cargo' : '',
+            'salario' : 0
+        }
+        if len(empleados) == 0:
+            id = validacionInt(message='Ingrese el ID del Empleado: ')
+            empleado['id'] = id
+        else:
+            while True:
+                isaddEm = True
+                id = validacionInt(message='Ingrese el ID del Empleado: ')
+                for key in empleados.keys():
+                    if key == str(id):
+                        print('Este ID ya se encuentra registrado')
+                        isaddEm = False
+                        sc.pauseScreen()
+                if isaddEm == True:
+                    empleado['id'] = id
+                    break
+        empleado['nombre'] = input('Nombre del Empleado: ')
+        empleado['cargo'] = input('Ingrese el cargo del empleado (Almacenista, Jefe IT, Administrador, Mensajero, Gerente)')
+        empleado['salario'] = validacionFloat(message='Ingrese el salario del Empleado: ')
+        sc.cleanScreen()
+        empleados.update({id : empleado}) #Actualiza el empleados con el contenido dado
+        file.updateFile('empleados.json', empleados)
+        isaddempleado = otherEmpleado(isaddempleado, empleados)
+
+def calcularVal(empleados : dict, nomina : dict):
+    isaddempleado = True
+    while isaddempleado:
+        pagado = {
+            'diasTrabajados' : 0.0,
+            'horasExtras' : 0.0,
+            'valorDia' : 0.0,
+            'descuentoCafeteria' : 0.0,
+            'cuotaPrestamo' : 0.0
+        }
+        
+        pagado['nombre'] = input('Nombre del Empleado: ')
+        pagado['cargo'] = input('Ingrese el cargo del pagado (Almacenista, Jefe IT, Administrador, Mensajero, Gerente)')
+        pagado['salario'] = validacionFloat(message='Ingrese el salario del Empleado: ')
+        sc.cleanScreen()
+        nomina.update({id : pagado}) #Actualiza el nomina con el contenido dado
+        file.updateFile('nomina.json', nomina)
+        isaddempleado = otherEmpleado(isaddempleado, nomina)
+        

@@ -1,0 +1,14 @@
+{
+    "1": {
+        "id": 1,
+        "nombre": "asdaf",
+        "cargo": "asfas",
+        "salario": 123131.0
+    },
+    "4": {
+        "id": 4,
+        "nombre": "dafwsfd",
+        "cargo": "adsfafd",
+        "salario": 123123.0
+    }
+}
